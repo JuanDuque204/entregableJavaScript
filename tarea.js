@@ -2,44 +2,48 @@
 // Función sumArray: Suma de todos los elementos de un array
 // Parámetros: array (Array) - Un array de números
 // Devuelve: Number - La suma de todos los elementos del array
-const sumArray = () => {
-    
+const sumArray = (array) => {
+    return array.reduce((a, b) => a + b, 0);
   };
   
   // Función filterEvenNumbers: Filtrar números pares de un array
   // Parámetros: array (Array) - Un array de números
   // Devuelve: Array - Un nuevo array con solo los números pares del array original
-  const filterEvenNumbers = () => {
-    
+  const filterEvenNumbers = (array) => {
+    return array.filter(num => num % 2 === 0);
   };
   
   // Función findMaxNumber: Encontrar el mayor número en un array
   // Parámetros: array (Array) - Un array de números
   // Devuelve: Number - El mayor número en el array
-  const findMaxNumber = () => {
-    
+  const findMaxNumber = (array) => {
+    if (array.length === 0) {
+        return undefined; 
+    }
+    return Math.max(...array);
   };
   
   // Función toUpperCaseStrings: Convertir un array de strings a mayúsculas
   // Parámetros: array (Array) - Un array de strings
   // Devuelve: Array - Un nuevo array con todas las strings convertidas a mayúsculas
-  const toUpperCaseStrings = () => {
-    
+  const toUpperCaseStrings = (array) => {
+    return array.map(str => str.toUpperCase());
   };
 
   
   // Función calculateAverage: Calcular el promedio de un array de números
   // Parámetros: array (Array) - Un array de números
   // Devuelve: Number - El promedio de los números en el array
-  const calculateAverage = () => {
-    
+  const calculateAverage = (array) => {
+    const sum = array.reduce((total, num) => total + num, 0);
+    return sum / array.length;
   };
   
   // Función sortNumbersAscending: Ordenar un array de números de forma ascendente
   // Parámetros: array (Array) - Un array de números
   // Devuelve: Array - Un nuevo array con los números ordenados de forma ascendente
-  const sortNumbersAscending = () => {
-    
+  const sortNumbersAscending = (array) => {
+    return array.slice().sort((a, b) => a - b);
   };
   
   // Función findFirstElement: Encontrar el primer elemento que cumple una condición en un array
@@ -47,15 +51,15 @@ const sumArray = () => {
   // - array (Array) - Un array de elementos
   // - condition (Function) - Una función de condición que devuelve true o false
   // Devuelve: Any - El primer elemento que cumple con la condición, o undefined si ninguno lo hace
-  const findFirstElement = () => {
-    
+  const findFirstElement = (array, condition) => {
+    return array.find(condition);
   };
   
   // Función countElements: Contar la cantidad de elementos en un array
   // Parámetros: array (Array) - Un array de elementos
   // Devuelve: Number - La cantidad de elementos en el array
-  const countElements = () => {
-    
+  const countElements = (array) => {
+    return array.length;
   };
   
   // Función concatenateArrays: Concatenar dos arrays
@@ -63,15 +67,15 @@ const sumArray = () => {
   // - array1 (Array) - El primer array a concatenar
   // - array2 (Array) - El segundo array a concatenar
   // Devuelve: Array - Un nuevo array que es la concatenación de los dos arrays proporcionados
-  const concatenateArrays = () => {
-    
+  const concatenateArrays = (array1, array2) => {
+    return array1.concat(array2);
   };
   
   // Función squareNumbers: Calcular el cuadrado de cada número en un array
   // Parámetros: array (Array) - Un array de números
   // Devuelve: Array - Un nuevo array con los cuadrados de los números en el array original
-  const squareNumbers = () => {
-    
+  const squareNumbers = (array) => {
+    return array.map(num => num * num);
   };
 
   // Función flecha para agregar habilidades a un jugador de un juego
@@ -89,6 +93,13 @@ const agregarHabilidad = (jugador, nuevaHabilidad) => {
     Valor de retorno:
     Retorna el objeto jugador modificado con la nueva habilidad agregada.
     */
+    if (!jugador.habilidades) {
+        jugador.habilidades = [];
+      }
+      if (!jugador.habilidades.includes(nuevaHabilidad)) {
+        jugador.habilidades.push(nuevaHabilidad);
+      }
+      return jugador;
     
    
 };
@@ -99,8 +110,13 @@ const agregarHabilidad = (jugador, nuevaHabilidad) => {
 // Retorna:
 // - Un número que representa la duración total de todas las películas en minutos.
 const calcularDuracionTotal = (peliculas) => {
-    
-};
+    if (!peliculas || peliculas.length === 0) {
+        return 0;
+      }
+      return peliculas.reduce((total, pelicula) => {
+        return total + (pelicula.duracion >= 0 ? pelicula.duracion : 0);
+      }, 0);
+  };
 
 
 // Función para buscar películas por título y género.
@@ -111,8 +127,17 @@ const calcularDuracionTotal = (peliculas) => {
 // Retorna:
 // - Un array de objetos que representan películas que coinciden con el título y el género especificados.
 const buscarPeliculas = (peliculas, titulo, genero) => {
-    
-};
+    if (!titulo && !genero) {
+        return [];
+      }
+      if (!titulo) {
+        return peliculas.filter(pelicula => pelicula.genero === genero);
+      }
+      if (!genero) {
+        return peliculas.filter(pelicula => pelicula.titulo.includes(titulo));
+      }
+      return peliculas.filter(pelicula => pelicula.titulo.includes(titulo) && pelicula.genero === genero);
+  };
 
 // Función para calcular el promedio de puntajes de las películas.
 // Parámetros:
@@ -120,8 +145,13 @@ const buscarPeliculas = (peliculas, titulo, genero) => {
 // Retorna:
 // - Un número que representa el promedio de puntajes de todas las películas.
 const calcularPromedioPuntajes = (peliculas) => {
-   
-};
+    if (peliculas.length === 0) {
+        return 0;
+    }
+    const sumaPuntajes = peliculas.reduce((suma, pelicula) => pelicula.puntaje >= 0 ? suma + pelicula.puntaje : suma, 0);
+    const cantidadPuntajes = peliculas.reduce((cantidad, pelicula) => pelicula.puntaje >= 0 ? cantidad + 1 : cantidad, 0);
+    return sumaPuntajes / cantidadPuntajes;
+  };
 
 // Función para filtrar películas por año de lanzamiento.
 // Parámetros:
@@ -130,9 +160,11 @@ const calcularPromedioPuntajes = (peliculas) => {
 // Retorna:
 // - Un array de objetos que representan películas lanzadas en el año especificado.
 const filtrarPorAño = (peliculas, año) => {
-    // Filtrar las películas por año de lanzamiento.
-    
-};
+    if (!año) {
+        return [];
+      }
+      return peliculas.filter(pelicula => pelicula.año == año);
+  };
 
 // Función para calcular el promedio de duración de las películas por género.
 // Parámetros:
@@ -141,153 +173,114 @@ const filtrarPorAño = (peliculas, año) => {
 // Retorna:
 // - Un número que representa el promedio de duración de las películas del género especificado.
 const calcularPromedioDuracionPorGenero = (peliculas, genero) => {
-    // Filtrar las películas por género.
-    
+    const peliculasDelGenero = peliculas.filter(pelicula => pelicula.genero.toLowerCase() === genero.toLowerCase());
+    if (peliculasDelGenero.length === 0) {
+      return 0;
+    }
+    const duraciones = peliculasDelGenero.map(pelicula => pelicula.duracion);
+    const totalDuracion = duraciones.reduce((total, duracion) => total + duracion, 0);
+    return totalDuracion / peliculasDelGenero.length;
+
 };
 
 
 // Clase base que representa un vehículo
 class Vehiculo {
-    /**
-     * Constructor de la clase Vehiculo.
-     * @param {string} marca - La marca del vehículo.
-     * @param {string} modelo - El modelo del vehículo.
-     * @param {number} año - El año de fabricación del vehículo.
-     */
-   
-
-    /**
-     * Método para obtener la información del vehículo.
-     * @returns {string} - La información del vehículo en formato de cadena de texto.
-     */
-    obtenerInformacion() {
-        
+    constructor(marca, modelo, año) {
+      this.marca = marca;
+      this.modelo = modelo;
+      this.año = año;
     }
-}
+  
+    obtenerInformacion() {
+        let info=`Marca: ${this.marca}, Modelo: ${this.modelo}, Año: ${this.año}`
+        return(info);
+      }
+  }
 
 
 // Clase que representa un automóvil
 class Automovil extends Vehiculo {
-    /**
-     * Constructor de la clase Automovil.
-     * @param {string} marca - La marca del automóvil.
-     * @param {string} modelo - El modelo del automóvil.
-     * @param {number} año - El año de fabricación del automóvil.
-     * @param {string} color - El color del automóvil.
-     * @param {number} cilindrada - La cilindrada del motor del automóvil.
-     * @param {number} potencia - La potencia del motor del automóvil.
-     * @param {number} numPuertas - El número de puertas del automóvil.
-     * @param {number} numAsientos - El número de asientos del automóvil.
-     * @param {string} tipoTransmision - El tipo de transmisión del automóvil.
-     */
+    constructor(marca, modelo, año, color, cilindrada, potencia, numPuertas, numAsientos, tipoTransmision) {
+        super(marca, modelo, año);
+        this.color = color;
+        this.cilindrada = cilindrada;
+        this.potencia = potencia;
+        this.numPuertas = numPuertas;
+        this.numAsientos = numAsientos;
+        this.tipoTransmision = tipoTransmision;
+      }
     
-
-    /**
-     * Método para obtener la información del automóvil.
-     * @returns {string} - La información del automóvil en formato de cadena de texto.
-     */
-    obtenerInformacion() {
-        
-    }
+      obtenerInformacion() {
+        return `Marca: ${this.marca}, Modelo: ${this.modelo}, Año: ${this.año}, Color: ${this.color}, Cilindrada: ${this.cilindrada}, Potencia: ${this.potencia}, Puertas: ${this.numPuertas}, Asientos: ${this.numAsientos}, Transmisión: ${this.tipoTransmision}`;
+      }
 }
 
 // Clase que representa una motocicleta
 class Motocicleta extends Vehiculo {
-    /**
-     * Constructor de la clase Motocicleta.
-     * @param {string} marca - La marca de la motocicleta.
-     * @param {string} modelo - El modelo de la motocicleta.
-     * @param {number} año - El año de fabricación de la motocicleta.
-     * @param {string} color - El color de la motocicleta.
-     * @param {number} cilindrada - La cilindrada del motor de la motocicleta.
-     * @param {number} potencia - La potencia del motor de la motocicleta.
-     * @param {number} numRuedas - El número de ruedas de la motocicleta.
-     * @param {string} tipo - El tipo de motocicleta (deportiva, touring, etc.).
-     */
+    constructor(marca, modelo, año, color, cilindrada, potencia, numRuedas, tipo) {
+        super(marca, modelo, año);
+        this.color = color;
+        this.cilindrada = cilindrada;
+        this.potencia = potencia;
+        this.numRuedas = numRuedas;
+        this.tipo = tipo;
+      }
     
-
-    /**
-     * Método para obtener la información de la motocicleta.
-     * @returns {string} - La información de la motocicleta en formato de cadena de texto.
-     */
-    obtenerInformacion() {
-       
-    }
+      obtenerInformacion() {
+        return `Marca: ${this.marca}, Modelo: ${this.modelo}, Año: ${this.año}, Color: ${this.color}, Cilindrada: ${this.cilindrada}, Potencia: ${this.potencia}, Ruedas: ${this.numRuedas}, Tipo: ${this.tipo}`;
+      }
 }
 
 // Clase que representa un camión
 class Camion extends Vehiculo {
-    /**
-     * Constructor de la clase Camion.
-     * @param {string} marca - La marca del camión.
-     * @param {string} modelo - El modelo del camión.
-     * @param {number} año - El año de fabricación del camión.
-     * @param {string} color - El color del camión.
-     * @param {number} cilindrada - La cilindrada del motor del camión.
-     * @param {number} potencia - La potencia del motor del camión.
-     * @param {number} numEjes - El número de ejes del camión.
-     * @param {number} capacidadCarga - La capacidad de carga del camión en toneladas.
-     * @param {string} tipoCarroceria - El tipo de carrocería del camión (remolque, furgón, etc.).
-     */
+    constructor(marca, modelo, año, color, cilindrada, potencia, numEjes, capacidadCarga, tipoCarroceria) {
+        super(marca, modelo, año);
+        this.color = color;
+        this.cilindrada = cilindrada;
+        this.potencia = potencia;
+        this.numEjes = numEjes;
+        this.capacidadCarga = capacidadCarga;
+        this.tipoCarroceria = tipoCarroceria;
+      }
     
-
-    /**
-     * Método para obtener la información del camión.
-     * @returns {string} - La información del camión en formato de cadena de texto.
-     */
-    obtenerInformacion() {
-        
-    }
+      obtenerInformacion() {
+        return `Marca: ${this.marca}, Modelo: ${this.modelo}, Año: ${this.año}, Color: ${this.color}, Cilindrada: ${this.cilindrada}, Potencia: ${this.potencia}, Ejes: ${this.numEjes}, Capacidad de Carga: ${this.capacidadCarga}, Tipo de Carrocería: ${this.tipoCarroceria}`;
+      }
 }
 
 // Clase que representa un autobús
 class Autobus extends Vehiculo {
-    /**
-     * Constructor de la clase Autobus.
-     * @param {string} marca - La marca del autobús.
-     * @param {string} modelo - El modelo del autobús.
-     * @param {number} año - El año de fabricación del autobús.
-     * @param {string} color - El color del autobús.
-     * @param {number} cilindrada - La cilindrada del motor del autobús.
-     * @param {number} potencia - La potencia del motor del autobús.
-     * @param {number} capacidadPasajeros - La capacidad de pasajeros del autobús.
-     * @param {string} tipoCombustible - El tipo de combustible del autobús.
-     * @param {string} tipoMotor - El tipo de motor del autobús (diésel, gasolina, eléctrico, etc.).
-     */
-   
-
-    /**
-     * Método para obtener la información del autobús.
-     * @returns {string} - La información del autobús en formato de cadena de texto.
-     */
-    obtenerInformacion() {
-        
-    }
+    constructor(marca, modelo, año, color, cilindrada, potencia, capacidadPasajeros, tipoCombustible, tipoMotor) {
+        super(marca, modelo, año);
+        this.color = color;
+        this.cilindrada = cilindrada;
+        this.potencia = potencia;
+        this.capacidadPasajeros = capacidadPasajeros;
+        this.tipoCombustible = tipoCombustible;
+        this.tipoMotor = tipoMotor;
+      }
+    
+      obtenerInformacion() {
+        return `Marca: ${this.marca}, Modelo: ${this.modelo}, Año: ${this.año}, Color: ${this.color}, Cilindrada: ${this.cilindrada}, Potencia: ${this.potencia}, Pasajeros: ${this.capacidadPasajeros}, Combustible: ${this.tipoCombustible}, Tipo de Motor: ${this.tipoMotor}`;
+      }
 }
 
 // Clase que representa una bicicleta
 class Bicicleta extends Vehiculo {
-    /**
-     * Constructor de la clase Bicicleta.
-     * @param {string} marca - La marca de la bicicleta.
-     * @param {string} modelo - El modelo de la bicicleta.
-     * @param {number} año - El año de fabricación de la bicicleta.
-     * @param {string} tipo - El tipo de bicicleta (montaña, carretera, urbana, etc.).
-     * @param {number} numMarchas - El número de marchas de la bicicleta.
-     * @param {string} material - El material del que está hecha la bicicleta (aluminio, acero, carbono, etc.).
-     * @param {string} suspencion - El tipo de suspensión de la bicicleta (delantera, trasera, doble, rígida, etc.).
-     * @param {string} frenos - El tipo de frenos de la bicicleta (disco, v-brake, caliper, etc.).
-     * @param {string} tipoManubrio - El tipo de manubrio de la bicicleta (recto, curvo, doble altura, etc.).
-     */
-  
-
-    /**
-     * Método para obtener la información de la bicicleta.
-     * @returns {string} - La información de la bicicleta en formato de cadena de texto.
-     */
-    obtenerInformacion() {
+    constructor(marca, modelo, año, tipo, numMarchas, material, suspencion, frenos, tipoManubrio) {
+        super(marca, modelo, año);
+        this.tipo = tipo;
+        this.numMarchas = numMarchas;
+        this.material = material;
+        this.suspencion = suspencion;
+        this.frenos = frenos;
+        this.tipoManubrio = tipoManubrio;
+        }
         
-    }
+        obtenerInformacion() {
+        return `${super.obtenerInformacion()}, Tipo: ${this.tipo}, Marchas: ${this.numMarchas}, Material: ${this.material}, Suspensión: ${this.suspencion}, Frenos: ${this.frenos}, Tipo de Manubrio: ${this.tipoManubrio}`;
+        }
 }
 
 /**
